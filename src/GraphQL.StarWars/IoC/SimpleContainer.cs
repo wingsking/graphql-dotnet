@@ -53,6 +53,23 @@ namespace GraphQL.StarWars.IoC
             Register(() => lazy.Value);
         }
 
+        public void Singleton<TService>()
+        {
+            Singleton<TService, TService>();
+        }
+
+        public void Singleton<TService, TImpl>()
+        {
+            var lazy = new Lazy<TService>(() =>
+            {
+                var implType = typeof (TImpl);
+                return typeof (TService) == implType
+                    ? (TService)CreateInstance(implType)
+                    : (TService)Get(implType);
+            });
+            Register<TService>(() => lazy.Value);
+        }
+
         public T Get<T>()
         {
             return (T)Get(typeof (T));
