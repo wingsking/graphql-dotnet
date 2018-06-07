@@ -229,6 +229,11 @@ namespace GraphQL.Execution
             }
             catch (Exception ex)
             {
+                if (context.ThrowExceptions)
+                {
+                    throw ex;
+                }
+
                 var error = new ExecutionError($"Error trying to resolve {node.Name}.", ex);
                 error.AddLocation(node.Field, context.Document);
                 error.Path = node.Path;

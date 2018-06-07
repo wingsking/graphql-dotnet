@@ -30,6 +30,8 @@ namespace GraphQL
 
         public bool ExposeExceptions { get; set; } = false;
 
+        public bool ThrowExceptions { get; set; } = false;
+
         //Note disabling will increase performance
         public bool EnableMetrics { get; set; } = true;
 

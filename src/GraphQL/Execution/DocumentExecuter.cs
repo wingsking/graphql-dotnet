@@ -185,7 +185,8 @@ namespace GraphQL
                     options.UserContext,
                     options.CancellationToken,
                     metrics,
-                    options.Listeners);
+                    options.Listeners,
+                    options.ThrowExceptions);
 
                 if (context.Errors.Any())
                 {
@@ -233,6 +234,11 @@ namespace GraphQL
             }
             catch (Exception ex)
             {
+                if (options.ThrowExceptions)
+                {
+                    throw ex;
+                }
+
                 result = new ExecutionResult
                 {
                     Errors = new ExecutionErrors()
@@ -260,7 +266,8 @@ namespace GraphQL
             object userContext,
             CancellationToken cancellationToken,
             Metrics metrics,
-            IEnumerable<IDocumentExecutionListener> listeners)
+            IEnumerable<IDocumentExecutionListener> listeners,
+            bool throwExceptions)
         {
             var context = new ExecutionContext();
             context.Document = document;
@@ -275,6 +282,8 @@ namespace GraphQL
 
             context.Metrics = metrics;
             context.Listeners = listeners;
+
+            context.ThrowExceptions = throwExceptions;
 
             return context;
         }

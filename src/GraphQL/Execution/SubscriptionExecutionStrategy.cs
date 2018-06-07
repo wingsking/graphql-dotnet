@@ -136,6 +136,11 @@ namespace GraphQL.Execution
             }
             catch (Exception ex)
             {
+                if (context.ThrowExceptions)
+                {
+                    throw ex;
+                }
+
                 var message = $"Error trying to resolve {node.Field.Name}.";
                 var error = GenerateError(context, message, node.Field, node.Path, ex);
                 context.Errors.Add(error);
